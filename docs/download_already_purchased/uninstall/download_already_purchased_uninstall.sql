@@ -1,0 +1,1 @@
+DELETE FROM configuration WHERE configuration_key = 'DOWNLOAD_ALREADY_PURCHASED_MESSAGING' LIMIT 1;
