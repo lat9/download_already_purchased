@@ -61,7 +61,7 @@ th { background-color: #eee; }
 
 <body>
   <h1>Download Already Purchased</h1>
-  <h3>Version 1.0.0 by lat9</h3>
+  <h3>Version 1.1.0 by lat9</h3>
   <h4>Copyright &copy; 2017, <a href="http://vinosdefrutastropicales.com" target="_blank">Vinos de Frutas Tropicales</a></h4>
   <p>Current Support Thread at Zen Cart Forums: <a href="https://www.zen-cart.com/showthread.php?222528-You-already-purchased-this-product">https://www.zen-cart.com/showthread.php?222528-You-already-purchased-this-product</a></p>
 
@@ -75,11 +75,19 @@ th { background-color: #eee; }
       <div id="overview">
         <h2>What it does</h2>
         <p>This plugin recognizes that Zen Cart&reg; downloadable products are <em>different</em>.  If a customer has previously purchased a download and that product is still available for the customer's download, why give the customer the opportunity to re-purchase the product?</p>
-        <p>Once installed, the plugin adds the configuration setting <em>Configuration-&gt;Attribute Settings-&gt;Download Already Purchased: Messaging</em>.  The following settings are available:</p>
+        <p>Once installed, the plugin adds configuration settings to <em>Configuration-&gt;Attribute Settings</em>.  The following settings are available:</p>
         <ol>
-          <li><strong>Disabled:</strong> No special handling; the download can always be re-purchased without message.</li>
-          <li><strong>Call on Expiration:</strong> Regardless the status of a product-download's expiration, the item cannot be re-purchased.  If the download has not expired, the customer is directed to the order-information page where the active download link is displayed.  Otherwise, a message is displayed indicating that the customer has previously purchased the product and should contact the store to get the download reset.</li>
-          <li><strong>Enforce Expiration:</strong> If the download has not expired, the item cannot be re-purchased.  The customer is, instead, directed to the order-information page where the active download link is displayed.  Otherwise, the customer can re-purchase the product.</li>
+          <li><em>Download Already Purchased: Messaging</em>; choose an option:<ol>
+            <li><strong>Disabled:</strong> No special handling; the download can always be re-purchased without message.  This is the default option on initial plugin installation.</li>
+            <li><strong>Call on Expiration:</strong> Regardless the status of a product-download's expiration, the item cannot be re-purchased.  If the download has not expired, the customer is directed to the order-information page where the active download link is displayed.  Otherwise, a message is displayed indicating that the customer has previously purchased the product and should contact the store to get the download reset.</li>
+            <li><strong>Enforce Expiration:</strong> If the download has not expired, the item cannot be re-purchased.  The customer is, instead, directed to the order-information page where the active download link is displayed.  Otherwise, the customer can re-purchase the product.</li>
+          </ol></li>
+          <li><em>Download Already Purchased: Product Exclusions</em><ul>
+            <li>Enter a comma-separated list of products_id values; those products will be excluded from the plugin's &quot;already purchased&quot; checks.</li>
+          </ul></li>
+          <li><em>Download Already Purchased: Category Exclusions</em><ul>
+            <li>Enter a comma-separated list of categories_id values &mdash; <em>presumed</em> to contain products.  Any products in (or linked to) those categories will be excluded from the plugin's &quot;already purchased&quot; checks.</li>
+          </ul></li>
         </ol>
         <p>The plugin &quot;watches&quot; for products being added to the <em>logged-in</em> customer's cart and when the shopping-cart class attempts to restore the customer's saved cart.  For each case, the rules associated with the store's defined setting (see above) are applied.</p>
       </div>
@@ -117,6 +125,14 @@ th { background-color: #eee; }
       <div id="version">
         <p>This section identifies the plugin's change history.</p>
         <ul>
+          <li>v1.1.0, 2017-08-06:<ul>
+            <li>CHANGE: Additional configuration settings to exclude a list of products and/or categories from the plugin's processing.</li>
+            <li>BUGFIX: Remove unwanted debug code.</li>
+            <li>The following files were changed:<ol>
+              <li>/includes/classes/observers/DownloadAlreadyPurchased.php</li>
+              <li>/YOUR_ADMIN/includes/init_includes/initAdminDownloadAlreadyPurchased.php</li>
+            </ol></li>
+          </ul></li>
           <li>v1.0.0, 2017-07-15:<ul>
             <li>Initial release.</li>
           </ul></li>

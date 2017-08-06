@@ -13,7 +13,8 @@ class DownloadAlreadyPurchased extends base
            $filename,               //-The name of the file (presumed to be in the DIR_FS_DOWNLOAD directory)
            $products_name,          //-The name of the associated product (used in customer messaging)
            $timeout_enforced,       //-Identifies whether (true) or not (false) the store is configured to "enforce" the download timeouts
-           $enabled;                //-Identifies whether/not this processing is enabled.
+           $enabled,                //-Identifies whether/not this processing is enabled.
+           $excluded_products;      //-Contains an array of products to be excluded from this handling.
            
     public function __construct() {
         $this->enabled = false;
@@ -26,6 +27,7 @@ class DownloadAlreadyPurchased extends base
                     'NOTIFIER_CART_RESTORE_CONTENTS_END'
                 )
             );
+            $this->initializeExclusions();
         }
     }
 
@@ -56,7 +58,6 @@ class DownloadAlreadyPurchased extends base
                     foreach ($products_to_remove as $uprid) {
                         $_SESSION['cart']->remove($uprid);
                     }
-                    trigger_error(var_export($_SESSION, true), E_USER_WARNING);
                     zen_redirect(zen_href_link(FILENAME_SHOPPING_CART));
                 }
             }
@@ -107,8 +108,57 @@ class DownloadAlreadyPurchased extends base
     }
     
     // -----
+    // Determine whether any product exclusions have been configured and initialize the list of to-be-excluded
+    // product_id values.
+    //
+    protected function initializeExclusions()
+    {
+        $excluded_products = array();
+        
+        // -----
+        // First, if there are product exclusions, make sure that each products_id identified is an unsigned
+        // integer value; if so, add it to the list.
+        //
+        if (defined('DOWNLOAD_ALREADY_PURCHASED_EXCLUDE_PRODUCTS')) {
+            $exclusion_list = explode(',', str_replace(' ', '', DOWNLOAD_ALREADY_PURCHASED_EXCLUDE_PRODUCTS));
+            foreach ($exclusion_list as $current_product_id) {
+                if (preg_match('/^[0-9]+$/', $current_product_id)) {
+                    $excluded_products[] = $current_product_id;
+                }
+            }
+        }
+        
+        // -----
+        // Next, check each categories_id value and, if it's an unsigned integer value, look up all products for
+        // that category in the database.  The database query returns a comma-separated list of id values; add those
+        // products to the list of exclusions.
+        //
+        if (defined('DOWNLOAD_ALREADY_PURCHASED_EXCLUDE_CATEGORIES')) {
+            $exclusion_list = explode(',', str_replace(' ', '', DOWNLOAD_ALREADY_PURCHASED_EXCLUDE_CATEGORIES));
+            foreach ($exclusion_list as $current_category_id) {
+                if (preg_match('/^[0-9]+$/', $current_category_id)) {
+                    $result = $GLOBALS['db']->Execute(
+                        "SELECT GROUP_CONCAT(products_id SEPARATOR ',') as products_list
+                           FROM " . TABLE_PRODUCTS_TO_CATEGORIES . "
+                          WHERE categories_id = $current_category_id"
+                    );
+                    if (!$result->EOF) {
+                        $excluded_products = array_merge($excluded_products, explode(',', $result->fields['products_list']));
+                    }
+                }
+            }
+        }
+        
+        // -----
+        // Finally, record the array of products_id values that are to be excluded from this processing ...
+        // after removing any duplicates.
+        //
+        $this->excluded_products = array_unique($excluded_products);
+    }
+    
+    // -----
     // Returns a boolean indicator, identifying whether (true) or not (false) the specified product is
-    // downloadable and has been previously purchased.
+    // not in the store's defined exclusion list, is downloadable and has been previously purchased.
     //
     protected function checkDownloadPriorPurchase($products_id, $option_id, $option_value_id)
     {
@@ -116,14 +166,16 @@ class DownloadAlreadyPurchased extends base
         $this->is_downloadable = false;
         if (isset($_SESSION['customer_id'])) {
             $products_id = (int)zen_get_prid($products_id);
-            $option_id = (int)$option_id;
-            $option_value_id = (int)$option_value_id;
-            
-            if ($this->isProductDownload($products_id, $option_id, $option_value_id)) {
-                if ($this->gatherPurchaseInfo($products_id, $option_id, $option_value_id)) {
-                    $is_prior_purchase = true;
-                    if ($this->isDownloadable()) {
-                        $this->is_downloadable = true;
+            if (!in_array($products_id, $this->excluded_products)) {
+                $option_id = (int)$option_id;
+                $option_value_id = (int)$option_value_id;
+                
+                if ($this->isProductDownload($products_id, $option_id, $option_value_id)) {
+                    if ($this->gatherPurchaseInfo($products_id, $option_id, $option_value_id)) {
+                        $is_prior_purchase = true;
+                        if ($this->isDownloadable()) {
+                            $this->is_downloadable = true;
+                        }
                     }
                 }
             }
