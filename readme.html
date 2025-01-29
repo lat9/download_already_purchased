@@ -92,8 +92,8 @@ table table {
 
 <body>
     <h1>Download Already Purchased</h1>
-    <h3>Version 1.1.0 by lat9</h3>
-    <h4>Copyright &copy; 2017, <a href="https://vinosdefrutastropicales.com" target="_blank">Vinos de Frutas Tropicales</a></h4>
+    <h3>Version 2.0.0 by lat9</h3>
+    <h4>Copyright &copy; 2017-2025, <a href="https://vinosdefrutastropicales.com" target="_blank">Vinos de Frutas Tropicales</a></h4>
     <p>Current Support Thread at Zen Cart Forums: <a href="https://www.zen-cart.com/showthread.php?222528-You-already-purchased-this-product">https://www.zen-cart.com/showthread.php?222528-You-already-purchased-this-product</a></p>
 
     <h2>What it does</h2>
@@ -131,17 +131,30 @@ table table {
 
     <h2>Change History</h2>
     <ul>
-      <li>v1.1.0, 2017-08-06:<ul>
-        <li>CHANGE: Additional configuration settings to exclude a list of products and/or categories from the plugin's processing.</li>
-        <li>BUGFIX: Remove unwanted debug code.</li>
-        <li>The following files were changed:<ol>
-          <li>/includes/classes/observers/DownloadAlreadyPurchased.php</li>
-          <li>/YOUR_ADMIN/includes/init_includes/initAdminDownloadAlreadyPurchased.php</li>
-        </ol></li>
-      </ul></li>
-      <li>v1.0.0, 2017-07-15:<ul>
-        <li>Initial release.</li>
-      </ul></li>
+        <li>v2.0.0, 2025-01-29:<ul>
+            <li>CHANGE: Using zc158+ array-based language files.</li>
+            <li>CHANGE: Using PHP short-array syntax and HTML-5 &lt;br&gt; tags.</li>
+            <li>The following files were changed, <span class="added">added</span> or <span class="removed">removed</span>:<ol>
+                <li>/includes/auto_loaders/config.DownloadAlreadyPurchased.php</li>
+                <li>/includes/auto_loaders/paypal_ipn.DownloadAlreadyPurchased.php</li>
+                <li>/includes/classes/observers/DownloadAlreadyPurchased.php</li>
+                <li>/includes/extra_cart_actions/download_already_purchased_action.php</li>
+                <li><span class="removed">/includes/languages/english/extra_definitions/download_already_purchased_messages.php</span></li>
+                <li><span class="added">/includes/languages/english/extra_definitions/lang.download_already_purchased_messages.php</span></li>
+                <li>/YOUR_ADMIN/includes/auto_loaders/config.adminDownloadAlreadyPurchased.php</li>
+                <li>/YOUR_ADMIN/includes/init_includes/initAdminDownloadAlreadyPurchased.php</li>
+            </ol></li>
+        <li>v1.1.0, 2017-08-06:<ul>
+            <li>CHANGE: Additional configuration settings to exclude a list of products and/or categories from the plugin's processing.</li>
+            <li>BUGFIX: Remove unwanted debug code.</li>
+            <li>The following files were changed:<ol>
+                <li>/includes/classes/observers/DownloadAlreadyPurchased.php</li>
+                <li>/YOUR_ADMIN/includes/init_includes/initAdminDownloadAlreadyPurchased.php</li>
+            </ol></li>
+        </ul></li>
+        <li>v1.0.0, 2017-07-15:<ul>
+            <li>Initial release.</li>
+        </ul></li>
     </ul>
 </body>
 </html>
