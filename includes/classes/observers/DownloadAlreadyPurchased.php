@@ -20,7 +20,7 @@ class DownloadAlreadyPurchased extends base
     {
         $this->enabled = false;
         if (DOWNLOAD_ENABLED === 'true' && defined('DOWNLOAD_ALREADY_PURCHASED_MESSAGING') && DOWNLOAD_ALREADY_PURCHASED_MESSAGING !== 'Disabled') {
-            $this->enabled = true;
+            $this->enabled = (zen_is_logged_in() && !zen_in_guest_checkout());
             $this->timeout_enforced = (DOWNLOAD_ALREADY_PURCHASED_MESSAGING === 'Enforce Expiration');
             $this->attach(
                 $this,
@@ -77,7 +77,7 @@ class DownloadAlreadyPurchased extends base
     {
         $message = false;
         if ($this->checkDownloadPriorPurchase($products_id, $option_id, $option_values_id)) {
-            if (!$this->is_downloadable) {
+            if ($this->is_downloadable === false) {
                 if (!$this->timeout_enforced) {
                     $contact_us_link = zen_href_link(FILENAME_CONTACT_US, '', 'SSL');
                     $message = sprintf(DAP_MESSAGE_DOWNLOAD_EXPIRED_CALL_US_NOT_ADDED, $this->products_name, $contact_us_link);
@@ -94,7 +94,7 @@ class DownloadAlreadyPurchased extends base
     {
         $message = false;
         if ($this->checkDownloadPriorPurchase($products_id, $option_id, $option_values_id)) {
-            if (!$this->is_downloadable) {
+            if ($this->is_downloadable === false) {
                 if (!$this->timeout_enforced) {
                     $contact_us_link = zen_href_link(FILENAME_CONTACT_US, '', 'SSL');
                     $message = sprintf(DAP_MESSAGE_DOWNLOAD_EXPIRED_CALL_US_REMOVED, $this->products_name, $contact_us_link);
@@ -164,19 +164,16 @@ class DownloadAlreadyPurchased extends base
     {
         $is_prior_purchase = false;
         $this->is_downloadable = false;
-        if (isset($_SESSION['customer_id'])) {
-            $products_id = (int)zen_get_prid($products_id);
-            if (!in_array($products_id, $this->excluded_products)) {
-                $option_id = (int)$option_id;
-                $option_value_id = (int)$option_value_id;
-                
-                if ($this->isProductDownload($products_id, $option_id, $option_value_id)) {
-                    if ($this->gatherPurchaseInfo($products_id, $option_id, $option_value_id)) {
-                        $is_prior_purchase = true;
-                        if ($this->isDownloadable()) {
-                            $this->is_downloadable = true;
-                        }
-                    }
+
+        $products_id = (int)zen_get_prid($products_id);
+        if (!in_array($products_id, $this->excluded_products)) {
+            $option_id = (int)$option_id;
+            $option_value_id = (int)$option_value_id;
+            
+            if ($this->isProductDownload($products_id, $option_id, $option_value_id) === true) {
+                if ($this->gatherPurchaseInfo($products_id, $option_id, $option_value_id) === true) {
+                    $is_prior_purchase = true;
+                    $this->is_downloadable = $this->isDownloadable();
                 }
             }
         }

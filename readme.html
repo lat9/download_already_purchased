@@ -121,7 +121,7 @@ table table {
         <li>/includes/auto_loaders/paypal_ipn.DownloadAlreadyPurchased.php</li>
         <li>/includes/classes/observers/DownloadAlreadyPurchased.php</li>
         <li>/includes/extra_cart_actions/download_already_purchased_action.php</li>
-        <li>/includes/languages/english/extra_definitions/download_already_purchased_messages.php</li>
+        <li>/includes/languages/english/extra_definitions/lang.download_already_purchased_messages.php</li>
         <li>/YOUR_ADMIN/includes/auto_loaders/config.adminDownloadAlreadyPurchased.php</li>
         <li>/YOUR_ADMIN/includes/init_includes/initAdminDownloadAlreadyPurchased.php</li>
     </ol>
@@ -134,6 +134,7 @@ table table {
         <li>v2.0.0, 2025-01-29:<ul>
             <li>CHANGE: Using zc158+ array-based language files.</li>
             <li>CHANGE: Using PHP short-array syntax and HTML-5 &lt;br&gt; tags.</li>
+            <li>BUGFIX: Disable processing when a guest-checkout is in progress.</li>
             <li>The following files were changed, <span class="added">added</span> or <span class="removed">removed</span>:<ol>
                 <li>/includes/auto_loaders/config.DownloadAlreadyPurchased.php</li>
                 <li>/includes/auto_loaders/paypal_ipn.DownloadAlreadyPurchased.php</li>
