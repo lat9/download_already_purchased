@@ -1,20 +1,21 @@
 <?php
 // -----
 // Part of the "Download Already Purchased" plugin created by lat9.
-// Copyright (C) 2017-2025, Vinos de Frutas Tropicales
+// Copyright (C) 2017-2026, Vinos de Frutas Tropicales
 //
 class DownloadAlreadyPurchased extends base
 {
-    protected int $orders_id;              //- The last matching order-id
-    protected string $date_purchased;      //- The mySQL-format datetime value identifying the date-purchased for the above order-id
-    protected int $download_max_days;      //- The maximum number of days-from-purchase, after which the download expires
-    protected int $download_count;         //- The number of downloads remaining until the download expires
-    protected bool $is_expired;            //- A boolean indicator as to whether the currently-active download has expired.
-    protected string $filename;            //- The name of the file (presumed to be in the DIR_FS_DOWNLOAD directory)
-    protected string $products_name;       //- The name of the associated product (used in customer messaging)
-    protected bool $timeout_enforced;      //- Identifies whether (true) or not (false) the store is configured to "enforce" the download timeouts
-    protected bool $enabled;               //- Identifies whether/not this processing is enabled.
-    protected array $excluded_products;    //- Contains an array of products to be excluded from this handling.
+    protected int $orders_id;           //- The last matching order-id
+    protected string $date_purchased;   //- The mySQL-format datetime value identifying the date-purchased for the above order-id
+    protected int $download_max_days;   //- The maximum number of days-from-purchase, after which the download expires
+    protected int $download_count;      //- The number of downloads remaining until the download expires
+    protected bool $is_expired;         //- A boolean indicator as to whether the currently-active download has expired.
+    protected bool $is_downloadable;    //- A boolean indicator as to whether the current file is downloadable.
+    protected string $filename;         //- The name of the file (presumed to be in the DIR_FS_DOWNLOAD directory)
+    protected string $products_name;    //- The name of the associated product (used in customer messaging)
+    protected bool $timeout_enforced;   //- Identifies whether (true) or not (false) the store is configured to "enforce" the download timeouts
+    protected bool $enabled;            //- Identifies whether/not this processing is enabled.
+    protected array $excluded_products; //- Contains an array of products to be excluded from this handling.
 
     public function __construct()
     {
@@ -48,7 +49,7 @@ class DownloadAlreadyPurchased extends base
                 if (isset($product_details['attributes']) && is_array($product_details['attributes'])) {
                     $products_id = zen_get_prid($uprid);
                     foreach ($product_details['attributes'] as $option_id => $option_value_id) {
-                        $message = $this->checkDownloadPriorPurchaseRestoreCart($products_id, $option_id, $option_value_id);
+                        $message = $this->checkDownloadPriorPurchaseRestoreCart((int)$products_id, (int)$option_id, (int)$option_value_id);
                         if ($message !== false) {
                             $products_to_remove[] = $uprid;
                             $messageStack->add_session('header', $message, 'caution');
@@ -76,7 +77,7 @@ class DownloadAlreadyPurchased extends base
     public function checkDownloadPriorPurchaseAddCart($products_id, $option_id, $option_values_id): bool|string
     {
         $message = false;
-        if ($this->checkDownloadPriorPurchase($products_id, $option_id, $option_values_id)) {
+        if ($this->checkDownloadPriorPurchase((int)$products_id, (int)$option_id, (int)$option_values_id)) {
             if ($this->is_downloadable === false) {
                 if (!$this->timeout_enforced) {
                     $contact_us_link = zen_href_link(FILENAME_CONTACT_US, '', 'SSL');
@@ -90,7 +91,7 @@ class DownloadAlreadyPurchased extends base
         return $message;
     }
 
-    protected function checkDownloadPriorPurchaseRestoreCart($products_id, $option_id, $option_values_id): bool|string
+    protected function checkDownloadPriorPurchaseRestoreCart(int $products_id, int $option_id, int $option_values_id): bool|string
     {
         $message = false;
         if ($this->checkDownloadPriorPurchase($products_id, $option_id, $option_values_id)) {
@@ -160,7 +161,7 @@ class DownloadAlreadyPurchased extends base
     // Returns a boolean indicator, identifying whether (true) or not (false) the specified product is
     // not in the store's defined exclusion list, is downloadable and has been previously purchased.
     //
-    protected function checkDownloadPriorPurchase($products_id, $option_id, $option_value_id): bool
+    protected function checkDownloadPriorPurchase(int $products_id, int $option_id, int $option_value_id): bool
     {
         $is_prior_purchase = false;
         $this->is_downloadable = false;
@@ -248,7 +249,7 @@ class DownloadAlreadyPurchased extends base
     // Returns a boolean indication of whether (true) or not (false) a matching order for the customer
     // was found.
     //
-    protected function gatherPurchaseInfo($products_id, $option_id, $option_value_id): bool
+    protected function gatherPurchaseInfo(int $products_id, int $option_id, int $option_value_id): bool
     {
         global $db;
 
@@ -273,7 +274,7 @@ class DownloadAlreadyPurchased extends base
               LIMIT 1"
         );
         if (!$check->EOF) {
-            $this->orders_id = (int)check->fields['orders_id'];
+            $this->orders_id = (int)$check->fields['orders_id'];
             $this->download_count = (int)$check->fields['download_count'];
             $this->date_purchased = $check->fields['date_purchased'];
             $this->download_max_days = (int)$check->fields['download_maxdays'];

@@ -92,8 +92,8 @@ table table {
 
 <body>
     <h1>Download Already Purchased</h1>
-    <h3>Version 2.0.0 by lat9</h3>
-    <h4>Copyright &copy; 2017-2025, <a href="https://vinosdefrutastropicales.com" target="_blank">Vinos de Frutas Tropicales</a></h4>
+    <h3>Version 3.0.0 by lat9</h3>
+    <h4>Copyright &copy; 2017-2026, <a href="https://vinosdefrutastropicales.com" target="_blank">Vinos de Frutas Tropicales</a></h4>
     <p>Current Support Thread at Zen Cart Forums: <a href="https://www.zen-cart.com/showthread.php?222528-You-already-purchased-this-product">https://www.zen-cart.com/showthread.php?222528-You-already-purchased-this-product</a></p>
 
     <h2>What it does</h2>
@@ -114,23 +114,24 @@ table table {
     </ol>
     <p>The plugin &quot;watches&quot; for products being added to the <em>logged-in</em> customer's cart and when the shopping-cart class attempts to restore the customer's saved cart.  For each case, the rules associated with the store's defined setting (see above) are applied.</p>
 
-    <h2>Installation</h2>
-    <p>Rename the <code class="no-pad">YOUR_ADMIN</code> folder to match your Zen Cart admin's folder name and then copy the plugin's files to your store's file-system:</p>
+    <h2>Installing and Uninstalling</h2>
+    <h3>Installation</h3>
+    <p>Starting with v3.0.0, this is released as a Zen Cart <em>encapsulated plugin</em>, so installation (and removal) is simplified.</p>
     <ol>
-        <li>/includes/auto_loaders/config.DownloadAlreadyPurchased.php</li>
-        <li>/includes/auto_loaders/paypal_ipn.DownloadAlreadyPurchased.php</li>
-        <li>/includes/classes/observers/DownloadAlreadyPurchased.php</li>
-        <li>/includes/extra_cart_actions/download_already_purchased_action.php</li>
-        <li>/includes/languages/english/extra_definitions/lang.download_already_purchased_messages.php</li>
-        <li>/YOUR_ADMIN/includes/auto_loaders/config.adminDownloadAlreadyPurchased.php</li>
-        <li>/YOUR_ADMIN/includes/init_includes/initAdminDownloadAlreadyPurchased.php</li>
+        <li><em>Merge</em> the plugin's <code>/zc_plugins</code> with your site's pre-existing <code>/zc_plugins</code> directory.</li>
+        <li>Log into your Zen Cart admin panel.</li>
+        <li>Use the admin menus, navigating to <em>Modules :: Plugin Manager</em>.</li>
+        <li>You'll see a plugin named <b>Download Already Purchased</b>; click the <em>Install</em> button for the plugin.</li>
+        <li>Then navigate to <em>Configuration :: Attribute Settings</em> to configure the plugin.</li>
     </ol>
-
-    <h2>Uninstall</h2>
-    <p>First, delete the files that were copied to your Zen Cart installation admin directories. Then use your admin's <em>Tools :: Run SQL Patches</em> to run the file <code class="no-pad">download_already_purchased_uninstall.sql</code> that's provided in the root of this plugin's zip-file.</p>
+    <h3>Uninstall</h3>
+    <p>To uninstall the plugin, navigate to the admin's <em>Modules :: Plugin Manager</em>, find the line-item for <em>Download Already Purchased</em> and click the <em>Un-Install</em> button.</p>
 
     <h2>Change History</h2>
     <ul>
+        <li>v3.0.0, 2026-04-07:<ul>
+            <li>CHANGE: Now distributed as a Zen Cart encapsulated plugin.</li>
+        </ul></li>
         <li>v2.0.0, 2025-03-10:<ul>
             <li>CHANGE: Using zc158+ array-based language files.</li>
             <li>CHANGE: Using PHP short-array syntax and HTML-5 &lt;br&gt; tags.</li>

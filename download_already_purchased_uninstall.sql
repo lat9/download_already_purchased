@@ -1,1 +1,0 @@
-DELETE FROM configuration WHERE configuration_key LIKE 'DOWNLOAD\_ALREADY\_PURCHASED\_%';

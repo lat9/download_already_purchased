@@ -1,7 +1,7 @@
 <?php
 // -----
 // Part of the "Download Already Purchased" plugin created by lat9.
-// Copyright (C) 2017-2025, Vinos de Frutas Tropicales
+// Copyright (C) 2017-2026, Vinos de Frutas Tropicales
 //
 if (!defined('IS_ADMIN_FLAG')) {
     die('Illegal Access');
@@ -19,7 +19,6 @@ if (isset($_GET['action'], $downloadAlreadyPurchased, $_POST['id']) && $_GET['ac
             if ($message !== false) {
                 $messageStack->add('product_info', $message, 'caution');
                 unset($_GET['action']);
-                break;
             }
         }
     }
