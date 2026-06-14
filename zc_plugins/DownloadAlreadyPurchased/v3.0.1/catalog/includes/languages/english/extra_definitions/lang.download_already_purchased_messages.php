@@ -1,7 +1,9 @@
 <?php
 // -----
 // Part of the "Download Already Purchased" plugin created by lat9.
-// Copyright (C) 2017-2025, Vinos de Frutas Tropicales
+// Copyright (C) 2017-2026, Vinos de Frutas Tropicales
+//
+// Last updated: v3.0.1
 //
 // NOTE:  These messages make use of the PHP variable-ordering (to make translations easier); make sure that you ARE NOT
 // enclosing the message text using double-quotes ("), since the $ in the variable name will be improperly interpreted
@@ -23,5 +25,5 @@ return [
 
     'DAP_MESSAGE_DOWNLOAD_AVAILABLE_REMOVED' => 'You have an active download available for <em>%1$s</em>!  Click <a href="%2$s">here</a> to access that download; the product was removed from your saved cart.',
 
-    'DAP_MESSAGE_DOWNLOAD_EXPIRED_CALL_US_REMOVED', 'You previously purchased <em>%1$s</em>, but your download link has currently expired.  <a href="%2$s">Contact us</a> and we will re-enable that download; the product was removed from your saved cart.',
+    'DAP_MESSAGE_DOWNLOAD_EXPIRED_CALL_US_REMOVED' => 'You previously purchased <em>%1$s</em>, but your download link has currently expired.  <a href="%2$s">Contact us</a> and we will re-enable that download; the product was removed from your saved cart.',
 ];
